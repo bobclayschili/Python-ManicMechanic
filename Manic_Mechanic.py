@@ -5,6 +5,7 @@
 # Twitch removed and Insults removed in 1.3.0
 # Reworked the kicking routine and added endless loop with 'try' 1.4.0
 # Final version of this program for 2014
+# Made a change on this line
 
 # Initialize
 import pygame, time, sys
