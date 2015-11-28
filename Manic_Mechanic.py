@@ -1,10 +1,10 @@
 # Manic Mechanic - Halloween 2014
 # by Sean Clay
 # Rev. 1.5.0 - 10/31/2014
-# Relays added in 1.2.0
-# Twitch removed and Insults removed in 1.3.0
-# Reworked the kicking routine and added endless loop with 'try' 1.4.0
-# Final version of this program for 2014
+# This program controls a robotic Mechanic that will kick his legs when AllGoneBad routine is activated
+# Originally designed to run on a Raspberry Pi computer that would allow a PIR sensor to activate kicking
+# This version will work with any computer and just loops through the various sayings and kicks legs on loop #5
+# Uses a USB relay to send 12v to the Mechanic's lege (windshield wiper motor) and to activate the fog & strobe
 
 # Initialize
 import pygame, time, sys
@@ -12,7 +12,7 @@ from pylibftdi import BitBangDevice
 pygame.mixer.pre_init(44100, -16, 2, 4096)
 pygame.init()
 
-def buttonPressed():
+def AllGoneBad():
         pygame.mixer.music.stop()
         relay_on(fog_strobe)
         print ("Strobe & Fog on!")
@@ -46,8 +46,8 @@ good_sound = ['TurnTheKey.wav', 'AFewAdjustments.wav', 'StartsRunsDies.wav', 'AB
 bad_sound = ['AllGoneBad.wav']
 
 # Assign Relays - All accessed by binary numbers 1 - 128
-fog_strobe = 1  # Relay #1 Strobe light & Fog machine
-leg_kick = 2    # Relay #2 Kick Legs
+fog_strobe = 1  # Relay #1 Strobe light & Fog machine (12v)
+leg_kick = 2    # Relay #2 Kick Legs (12v)
 
 max_good = len(good_sound)-1
 max_bad = len(bad_sound)-1
@@ -64,14 +64,15 @@ while 1 == 1:
         pygame.mixer.music.set_volume(1)
         print ("Loaded ", good_sound[good])
         good = good + 1
+        # This section could be modified to be activated by a sensor
         if good > max_good:
             good = 0
-            print ("stupid routine to trigger gone bad")
-            buttonPressed()
+            print ("trigger gone bad routine")
+            AllGoneBad()
             pygame.mixer.music.load(good_sound[good])
 
         print ("good=",good)
-        print ("all relays off, stupid")
+        print ("all relays off")
         relay_off(255) # All Relays Off!
         pygame.mixer.music.play()
         while pygame.mixer.music.get_busy():
